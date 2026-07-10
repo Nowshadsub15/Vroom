@@ -119,7 +119,7 @@ void car_apply_suspension(Car *car, Wheel *wheel, float dt)
     Vector2 bottom_direction = Vector2Rotate((Vector2){0, 1}, car->angle * DEG2RAD);
     Vector2 attachment_point = Vector2Rotate((Vector2){-car->width / 2 + wheel->padding + wheel->radius + wheel->offset, 0}, car->angle * DEG2RAD);
     attachment_point = Vector2Add(attachment_point, car->position);
-    wheel->attachment_point = attachment_point; // stashed for car_render.c, no drawing here
+    wheel->attachment_point = attachment_point; 
 
     float length = Vector2Distance(wheel->position, attachment_point);
     float resting_length = car->height / 2 + wheel->padding + wheel->radius;
