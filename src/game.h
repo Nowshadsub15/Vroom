@@ -2,9 +2,14 @@
 #define GAME_H
 
 #include "car.h"
+#include "terrain.h"
+#include "camera.h"
+
 typedef struct GameState
 {
     Car car;
+    Vector2 terrain[TERRAIN_COUNT];
+    Camera2D camera;
 } GameState;
 
 GameState game_init(int window_width, int window_height);

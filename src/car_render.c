@@ -1,8 +1,6 @@
 #include "car.h"
 
-#define TRANSPARENT_BLACK (Color){0, 0, 0, 100}
-
-#define DEBUG_SUSPENSION 1
+#define TRANSPARENT_BLACK (Color){0,0,0,100}
 
 void car_draw(Car *car)
 {
@@ -15,9 +13,4 @@ void car_draw(Car *car)
                      (Vector2){car->width / 2, car->height / 2}, car->angle, TRANSPARENT_BLACK);
     DrawCircle(car->back_wheel.position.x, car->back_wheel.position.y, car->back_wheel.radius, TRANSPARENT_BLACK);
     DrawCircle(car->front_wheel.position.x, car->front_wheel.position.y, car->front_wheel.radius, TRANSPARENT_BLACK);
-
-#if DEBUG_SUSPENSION
-    DrawCircleV(car->back_wheel.attachment_point, 10, GREEN);
-    DrawCircleV(car->front_wheel.attachment_point, 10, GREEN);
-#endif
 }

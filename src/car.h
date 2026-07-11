@@ -12,7 +12,6 @@ typedef struct Wheel
     float stiffness;
     float damping;
     float offset;
-    Vector2 attachment_point; 
     bool on_ground;
 } Wheel;
 
@@ -27,14 +26,13 @@ typedef struct Car
     float angle;
 } Car;
 
-
 Car car_init(Vector2 start_position, int width, int height);
 
 void car_control(Car *car, float dt);
 void car_rotate(Car *car, float dt);
-void car_move(Car *car, float dt);
+void car_move(Car *car, Vector2 terrain[], int terrain_length, float dt);
 void car_apply_suspension(Car *car, Wheel *wheel, float dt);
-void wheel_move(Wheel *wheel, float dt);
+void wheel_move(Wheel *wheel, Vector2 terrain[], int terrain_count, float dt);
 
 void car_draw(Car *car);
 
