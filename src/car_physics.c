@@ -61,14 +61,14 @@ void car_control(Car *car, float dt)
     }
     if (IsKeyDown(KEY_RIGHT))
     {
-        if (car->back_wheel.on_ground)
+        if (car->back_wheel.on_ground && car->front_wheel.on_ground)
         {
             car->velocity.x += CAR_SPEED * dt;
         }
     }
     else if (IsKeyDown(KEY_LEFT))
     {
-        if (car->front_wheel.on_ground)
+        if (car->back_wheel.on_ground && car->front_wheel.on_ground)
         {
             car->velocity.x -= CAR_SPEED * dt;
         }
