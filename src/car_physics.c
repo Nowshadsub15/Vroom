@@ -21,8 +21,8 @@ Car car_init(Vector2 start_position, int width, int height)
         .radius = 25,
         .padding = 10,
         .velocity = (Vector2){0, 0},
-        .stiffness = 1.9,
-        .damping = 1.2,
+        .stiffness = 1.8,
+        .damping = 1.9,
     };
 
     car.back_wheel.position = (Vector2){
@@ -34,8 +34,8 @@ Car car_init(Vector2 start_position, int width, int height)
         .radius = 25,
         .padding = 10,
         .velocity = (Vector2){0, 0},
-        .stiffness = 1.9,
-        .damping = 1.2,
+        .stiffness = 1.8,
+        .damping = 1.9,
     };
     car.front_wheel.offset = car.width - car.back_wheel.radius - car.back_wheel.padding - car.front_wheel.padding - car.front_wheel.radius;
     car.front_wheel.position = (Vector2){
@@ -77,7 +77,7 @@ void car_control(Car *car, float dt)
 
 void car_rotate(Car *car, float dt)
 {
-    if (car->back_wheel.on_ground && car->front_wheel.on_ground)
+    if (car->back_wheel.on_ground || car->front_wheel.on_ground)
     {
         float angle = Vector2Angle(car->back_wheel.position, car->front_wheel.position);
         float diff = angle - car->angle;
@@ -132,7 +132,7 @@ void car_apply_suspension(Car *car, Wheel *wheel, float dt)
     Vector2 damping_force = Vector2Scale(relative_velocity, wheel->damping * dt);
     Vector2 force = Vector2Subtract(Vector2Scale(bottom_direction, spring_force), damping_force);
     car->velocity = Vector2Add(car->velocity, force);
-    wheel->velocity = Vector2Subtract(wheel->velocity, Vector2Scale(force, 0.7));
+    wheel->velocity = Vector2Subtract(wheel->velocity, Vector2Scale(force, .8));
 }
 
 void wheel_move(Wheel *wheel, float dt)
