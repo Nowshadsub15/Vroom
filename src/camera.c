@@ -1,6 +1,10 @@
 #include "camera.h"
 #include <math.h>
 
+#define CAMERA_ZOOM_MAX 1.3f
+#define CAMERA_ZOOM_MIN 0.5f
+#define CAMERA_ZOOM_SPEED 1.0f
+
 Camera2D camera_init(int window_width, int window_height)
 {
     Camera2D camera = {
@@ -19,16 +23,15 @@ void camera_update(Camera2D *camera, Vector2 target, float velocity_x, float dt)
 
     float speed = fabsf(velocity_x);
     
-    float target_zoom = 1.3f; 
+    float target_zoom = CAMERA_ZOOM_MAX; 
 
     if (speed > 3.0f) 
     {
-        target_zoom = 1.3f - ((speed - 3.0f) / 15.0f); 
+        target_zoom = CAMERA_ZOOM_MAX - ((speed - 3.0f) / 15.0f); 
     }
 
-    if (target_zoom > 1.3f) target_zoom = 1.3f;
-    if (target_zoom < -4.0f) target_zoom = -4.0f;
-    float zoom_speed = 2.0f ; 
+    if (target_zoom > CAMERA_ZOOM_MAX) target_zoom = CAMERA_ZOOM_MAX;
+    if (target_zoom < CAMERA_ZOOM_MIN) target_zoom = CAMERA_ZOOM_MIN;
 
-    camera->zoom += (target_zoom - camera->zoom) *zoom_speed*dt; 
+    camera->zoom += (target_zoom - camera->zoom) *CAMERA_ZOOM_SPEED*dt; 
 }
