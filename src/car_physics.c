@@ -3,11 +3,11 @@
 #include <raymath.h>
 
 #define GRAVITY 7
-#define FRICTION 0.2
+#define FRICTION 2
 #define ROTATION_SPEED 30
 #define ROTATE_BACK_SPEED 3
-#define CAR_SPEED 3
-#define HILL_SPEED 0.2
+#define CAR_SPEED 20
+#define HILL_SPEED 0.9
 
 Car car_init(Vector2 start_position, int width, int height)
 {
@@ -83,48 +83,41 @@ void car_rotate( Car* car, float dt ) {
     }
 }
 
-void car_move(Car *car, Vector2 terrain[], int terrain_length,float dt)
+void car_move(Car *car, Vector2 terrain[], int terrain_length, float dt)
 {
     car->position.x += car->velocity.x;
     car->position.y += car->velocity.y;
 
-
     if (car->back_wheel.on_ground)
     {
-        // float friction = car->velocity.x * FRICTION;
-        // car->velocity.x -= friction * dt;
+        int terrain_index = floor(car->back_wheel.position.x / terrain_length);
+        
+        if (terrain_index < 0) terrain_index = 0;
+        if (terrain_index >= TERRAIN_COUNT - 1) terrain_index = TERRAIN_COUNT - 2;
 
-        int terrain_index =floor(car->back_wheel.position.x / terrain_length );
-        Vector2 point1 = terrain[terrain_index] ;
-        Vector2 point2 = terrain[terrain_index+1] ; //TODO : fix overflow
+        Vector2 point1 = terrain[terrain_index];
+        Vector2 point2 = terrain[terrain_index + 1]; 
 
-        // DrawCircleV(point1, 10, RED) ;
-        // DrawCircleV(point2, 10, ORANGE) ;
-
-        float angle = Vector2LineAngle (point1, point2) * RAD2DEG;
-        car->velocity.x += angle*HILL_SPEED*dt ; 
-        float friction = car->velocity.x*FRICTION ;
-        car->velocity.x -= friction*dt ;
+        float angle = Vector2LineAngle(point1, point2) * RAD2DEG;
+        car->velocity.x += angle * HILL_SPEED * dt; 
+        float friction = car->velocity.x * FRICTION;
+        car->velocity.x -= friction * dt;
     }
 
     if (car->front_wheel.on_ground)
     {
-        // float friction = car->velocity.x * FRICTION;
-        // car->velocity.x -= friction * dt;
-
+        int terrain_index = floor(car->front_wheel.position.x / terrain_length);
         
+        if (terrain_index < 0) terrain_index = 0;
+        if (terrain_index >= TERRAIN_COUNT - 1) terrain_index = TERRAIN_COUNT - 2;
 
-        int terrain_index =floor(car->front_wheel.position.x / terrain_length );
-        Vector2 point1 = terrain[terrain_index] ;
-        Vector2 point2 = terrain[terrain_index+1] ;
+        Vector2 point1 = terrain[terrain_index];
+        Vector2 point2 = terrain[terrain_index + 1];
 
-        // DrawCircleV(point1, 10, RED) ;
-        // DrawCircleV(point2, 10, ORANGE) ;
-
-        float angle = Vector2LineAngle (point1, point2) * RAD2DEG;
-        car->velocity.x += angle*HILL_SPEED*dt ; 
-        float friction = car->velocity.x*FRICTION ;
-        car->velocity.x -= friction*dt ;
+        float angle = Vector2LineAngle(point1, point2) * RAD2DEG;
+        car->velocity.x += angle * HILL_SPEED * dt; 
+        float friction = car->velocity.x * FRICTION;
+        car->velocity.x -= friction * dt;
     }
 
     float max_y = GetScreenHeight() - car->height / 2;
@@ -136,6 +129,15 @@ void car_move(Car *car, Vector2 terrain[], int terrain_length,float dt)
     else
     {
         car->velocity.y += GRAVITY * dt;
+    }
+    if (car->position.x < terrain[0].x + (car->width) * 3)
+    {
+        car->position.x = terrain[0].x + (car->width)*3;
+        
+        if (car->velocity.x < 0) 
+        {
+            car->velocity.x = 0; 
+        }
     }
 }
 

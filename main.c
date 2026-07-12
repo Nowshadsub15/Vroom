@@ -6,7 +6,7 @@
 
 int main(void)
 {
-    InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Uphill Racer");
+    InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Vroom");
     SetTargetFPS(60);
 
     GameState state = game_init(WINDOW_WIDTH, WINDOW_HEIGHT);

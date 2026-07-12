@@ -18,7 +18,23 @@ void game_update(GameState *state, float dt)
 {
     Car *car = &state->car;
 
-    camera_update(&state->camera, car->position, car->velocity.x);
+    camera_update(&state->camera, car->position, car->velocity.x, dt);
+
+    int trigger_index = 200;
+    int shift_count = 100;
+
+    if(state->car.position.x > state->terrain[trigger_index].x)
+    {
+        float shift_x = shift_count * TERRAIN_LENGTH;
+
+        terrain_shift(state->terrain, TERRAIN_COUNT, TERRAIN_LENGTH, shift_count);
+
+        state->car.position.x -= shift_x;
+        state->car.back_wheel.position.x -= shift_x;
+        state->car.front_wheel.position.x -= shift_x;
+        state->camera.target.x -= shift_x;
+
+    }
 
     car_control(car, dt);
     car_move(car, state->terrain, TERRAIN_LENGTH, dt);

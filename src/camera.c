@@ -1,4 +1,5 @@
 #include "camera.h"
+#include <math.h>
 
 Camera2D camera_init(int window_width, int window_height)
 {
@@ -12,14 +13,22 @@ Camera2D camera_init(int window_width, int window_height)
     return camera;
 }
 
-void camera_update(Camera2D *camera, Vector2 target, float velocity_x)
+void camera_update(Camera2D *camera, Vector2 target, float velocity_x, float dt) 
 {
     camera->target = target;
-    camera->zoom = 1.3 - velocity_x / 10;
-    if( camera->zoom > 1.3 ) {
-        camera->zoom = 1.3;
+
+    float speed = fabsf(velocity_x);
+    
+    float target_zoom = 1.3f; 
+
+    if (speed > 3.0f) 
+    {
+        target_zoom = 1.3f - ((speed - 3.0f) / 15.0f); 
     }
-    if( camera->zoom < 1 ) {
-        camera->zoom = 1;
-    }
+
+    if (target_zoom > 1.3f) target_zoom = 1.3f;
+    if (target_zoom < -4.0f) target_zoom = -4.0f;
+    float zoom_speed = 2.0f ; 
+
+    camera->zoom += (target_zoom - camera->zoom) *zoom_speed*dt; 
 }

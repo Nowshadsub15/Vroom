@@ -1,5 +1,6 @@
 #include "terrain.h"
 #include <math.h>
+#include <string.h>
 
 bool IsPointBelowLine(Vector2 a, Vector2 b, Vector2 point, Vector2 *collisionPoint) {
     // Handle non-vertical segments.
@@ -25,15 +26,56 @@ bool IsPointBelowLine(Vector2 a, Vector2 b, Vector2 point, Vector2 *collisionPoi
     }
 }
 
-void terrain_generate(Vector2 terrain[], int terrain_count, int terrain_length, int window_height)
+void terrain_generate(Vector2 terrain[],
+                      int terrain_count,
+                      int terrain_length,
+                      int window_height)
 {
-    int pos = GetRandomValue( window_height * 0.7, window_height * 0.95 );
-    for( int i = 0; i < terrain_count; i++ ) {
-        int movement = GetRandomValue( -20, 20 );
+    int pos = GetRandomValue(window_height * 0.7,
+                             window_height * 0.95);
 
-        Vector2 point = {i * terrain_length, pos};
-        terrain[i] = point;
+    for (int i = 0; i < terrain_count; i++)
+    {
+        terrain[i].x = i * terrain_length;
+        terrain[i].y = pos;
 
-        pos = pos + movement;
+        pos += GetRandomValue(-20,20);
+
+        if(pos < window_height * 0.35)
+            pos = window_height * 0.35;
+
+        if(pos > window_height * 0.95)
+            pos = window_height * 0.95;
+    }
+}
+
+
+
+
+void terrain_shift(Vector2 terrain[], int terrain_count, int terrain_length, int shift_count)
+{
+    int keep_count = terrain_count - shift_count;
+
+    memmove(terrain, terrain + shift_count, sizeof(Vector2) * keep_count);
+
+    for(int i = 0; i < terrain_count; i++)
+    {
+        terrain[i].x = i * terrain_length;
+    }
+
+    Vector2 last = terrain[keep_count - 1];
+    
+    int base_y = 500; 
+
+    for(int i = keep_count; i < terrain_count; i++)
+    {
+        int slope = GetRandomValue(-20, 20);
+
+        if (last.y < base_y - 150) slope += 15;
+        if (last.y > base_y + 150) slope -= 15; 
+
+        last.y += slope;
+        terrain[i].y = last.y;
+        last = terrain[i];
     }
 }
