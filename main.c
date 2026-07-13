@@ -18,7 +18,7 @@ int main(void)
         game_update(&state, dt);
 
         BeginDrawing();
-        ClearBackground(WHITE);
+        ClearBackground(BLUE);
         game_draw(&state);
         EndDrawing();
     }

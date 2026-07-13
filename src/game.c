@@ -4,8 +4,17 @@ GameState game_init(int window_width, int window_height)
 {
     GameState state = {0};
 
+    Texture2D car_tex = LoadTexture("car_body.png");
+    Texture2D wheel_tex = LoadTexture("wheel.png");
+
     Vector2 start_position = {1200, 300};
     state.car = car_init(start_position, 250, 100);
+
+    state.car.texture = car_tex;
+    state.car.back_wheel.texture = wheel_tex;
+    state.car.front_wheel.texture = wheel_tex;
+    state.car.back_wheel.rotation = 0.0f;
+    state.car.front_wheel.rotation = 0.0f;
 
     terrain_generate(state.terrain, TERRAIN_COUNT, TERRAIN_LENGTH, window_height);
 
@@ -23,7 +32,7 @@ void game_update(GameState *state, float dt)
     int trigger_index = 200;
     int shift_count = 100;
 
-    if(state->car.position.x > state->terrain[trigger_index].x)
+    if (state->car.position.x > state->terrain[trigger_index].x)
     {
         float shift_x = shift_count * TERRAIN_LENGTH;
 
@@ -33,7 +42,6 @@ void game_update(GameState *state, float dt)
         state->car.back_wheel.position.x -= shift_x;
         state->car.front_wheel.position.x -= shift_x;
         state->camera.target.x -= shift_x;
-
     }
 
     car_control(car, dt);

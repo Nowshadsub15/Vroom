@@ -10,6 +10,7 @@ typedef struct GameState
     Car car;
     Vector2 terrain[TERRAIN_COUNT];
     Camera2D camera;
+    Texture2D background;
 } GameState;
 
 GameState game_init(int window_width, int window_height);

@@ -13,6 +13,8 @@ typedef struct Wheel
     float damping;
     float offset;
     bool on_ground;
+    float rotation;       
+    Texture2D texture;    
 } Wheel;
 
 typedef struct Car
@@ -24,6 +26,7 @@ typedef struct Car
     Wheel back_wheel;
     Wheel front_wheel;
     float angle;
+    Texture2D texture;    
 } Car;
 
 Car car_init(Vector2 start_position, int width, int height);
