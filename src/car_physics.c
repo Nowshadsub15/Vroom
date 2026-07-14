@@ -151,12 +151,13 @@ void car_apply_suspension(Car *car, Wheel *wheel, float dt)
     
     wheel->position = Vector2Add(attachment_point, Vector2Scale(bottom_direction, length));
 
-    float spring_force = strech * wheel->stiffness * dt;
+    float spring_force = strech * wheel->stiffness ;
     
     Vector2 relative_velocity = Vector2Subtract(car->velocity, wheel->velocity);
-    Vector2 damping_force = Vector2Scale(relative_velocity, wheel->damping * dt);
+    Vector2 damping_force = Vector2Scale(relative_velocity, wheel->damping);
     
     Vector2 force = Vector2Subtract(Vector2Scale(bottom_direction, spring_force), damping_force);
+    force = Vector2Scale(force,dt) ;
     car->velocity = Vector2Add(car->velocity, force);
     wheel->velocity = Vector2Subtract(wheel->velocity, Vector2Scale(force, 0.7));
     

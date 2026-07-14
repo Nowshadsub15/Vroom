@@ -1,7 +1,8 @@
 #include "game.h"
 
 GameState game_init(int window_width, int window_height)
-{    GameState state = {0};
+{    
+    GameState state = {0};
 
     Texture2D car_tex = LoadTexture("car_body.png");
     Texture2D wheel_tex = LoadTexture("wheel.png");
