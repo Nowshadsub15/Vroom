@@ -1,5 +1,3 @@
-# Vroom Project
-
 # Vroom 
  
 A Hill Climb Racing–style 2D physics driving game, built in **C** with **raylib**.
