@@ -1,8 +1,7 @@
 #include "game.h"
 
 GameState game_init(int window_width, int window_height)
-{
-    GameState state = {0};
+{    GameState state = {0};
 
     Texture2D car_tex = LoadTexture("car_body.png");
     Texture2D wheel_tex = LoadTexture("wheel.png");
@@ -13,8 +12,7 @@ GameState game_init(int window_width, int window_height)
     state.car.texture = car_tex;
     state.car.back_wheel.texture = wheel_tex;
     state.car.front_wheel.texture = wheel_tex;
-    state.car.back_wheel.rotation = 0.0f;
-    state.car.front_wheel.rotation = 0.0f;
+    
 
     terrain_generate(state.terrain, TERRAIN_COUNT, TERRAIN_LENGTH, window_height);
 
