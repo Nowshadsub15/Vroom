@@ -1,3 +1,4 @@
+#include<stdio.h>
 #include "car.h"
 #include "terrain.h"
 #include <raymath.h>
@@ -49,17 +50,17 @@ Car car_init(Vector2 start_position, int width, int height)
 
 void car_control(Car *car, float dt)
 {
-    if (!car->back_wheel.on_ground && !car->front_wheel.on_ground)
-    {
-        if (IsKeyDown(KEY_LEFT))
-        {
-            car->angle += ROTATION_SPEED * dt;
-        }
-        else if (IsKeyDown(KEY_RIGHT))
-        {
-            car->angle -= ROTATION_SPEED * dt;
-        }
-    }
+    // if (!car->back_wheel.on_ground && !car->front_wheel.on_ground)
+    // {
+    //     if (IsKeyDown(KEY_LEFT))
+    //     {
+    //         car->angle += ROTATION_SPEED * dt;
+    //     }
+    //     else if (IsKeyDown(KEY_RIGHT))
+    //     {
+    //         car->angle -= ROTATION_SPEED * dt;
+    //     }
+    // } //as rotation not considered ... 
 
     if (IsKeyDown(KEY_RIGHT))
     {
@@ -88,12 +89,9 @@ void car_control(Car *car, float dt)
 }
 void car_rotate(Car *car, float dt)
 {
-    // if( car->back_wheel.on_ground && car->front_wheel.on_ground )
-    {
-        float angle = Vector2LineAngle(car->back_wheel.position, car->front_wheel.position) * RAD2DEG;
-        float diff = angle - car->angle;
-        car->angle += diff * ROTATE_BACK_SPEED * dt;
-    }
+    float angle = -Vector2LineAngle(car->back_wheel.position, car->front_wheel.position) * RAD2DEG;
+    float diff = angle - car->angle;
+    car->angle += diff * ROTATE_BACK_SPEED * dt;
 }
 
 void car_move(Car *car, Vector2 terrain[], int terrain_length, float dt)
@@ -104,11 +102,6 @@ void car_move(Car *car, Vector2 terrain[], int terrain_length, float dt)
     if (car->back_wheel.on_ground)
     {
         int terrain_index = floor(car->back_wheel.position.x / terrain_length);
-
-        if (terrain_index < 0)
-            terrain_index = 0;
-        if (terrain_index >= TERRAIN_COUNT - 1)
-            terrain_index = TERRAIN_COUNT - 2;
 
         Vector2 point1 = terrain[terrain_index];
         Vector2 point2 = terrain[terrain_index + 1];
@@ -123,11 +116,6 @@ void car_move(Car *car, Vector2 terrain[], int terrain_length, float dt)
     {
         int terrain_index = floor(car->front_wheel.position.x / terrain_length);
 
-        if (terrain_index < 0)
-            terrain_index = 0;
-        if (terrain_index >= TERRAIN_COUNT - 1)
-            terrain_index = TERRAIN_COUNT - 2;
-
         Vector2 point1 = terrain[terrain_index];
         Vector2 point2 = terrain[terrain_index + 1];
 
@@ -137,16 +125,9 @@ void car_move(Car *car, Vector2 terrain[], int terrain_length, float dt)
         car->velocity.x -= friction * dt;
     }
 
-    float max_y = GetScreenHeight() - car->height / 2;
-    if (car->position.y >= max_y)
-    {
-        car->velocity.y = 0;
-        car->position.y = max_y;
-    }
-    else
-    {
-        car->velocity.y += GRAVITY * dt;
-    }
+    
+    car->velocity.y += GRAVITY * dt;
+
     if (car->position.x < terrain[0].x + (car->width) * 3)
     {
         car->position.x = terrain[0].x + (car->width) * 3;
@@ -163,20 +144,22 @@ void car_apply_suspension(Car *car, Wheel *wheel, float dt)
     Vector2 bottom_direction = Vector2Rotate((Vector2){0, 1}, car->angle * DEG2RAD);
     Vector2 attachment_point = Vector2Rotate((Vector2){-car->width / 2 + wheel->padding + wheel->radius + wheel->offset, 0}, car->angle * DEG2RAD);
     attachment_point = Vector2Add(attachment_point, car->position);
-    // DrawCircleV(attachment_point, 10, GREEN);
+    
     float length = Vector2Distance(wheel->position, attachment_point);
     float resting_length = car->height / 2 + wheel->padding + wheel->radius;
     float strech = length - resting_length;
+    
     wheel->position = Vector2Add(attachment_point, Vector2Scale(bottom_direction, length));
 
     float spring_force = strech * wheel->stiffness * dt;
-
+    
     Vector2 relative_velocity = Vector2Subtract(car->velocity, wheel->velocity);
     Vector2 damping_force = Vector2Scale(relative_velocity, wheel->damping * dt);
+    
     Vector2 force = Vector2Subtract(Vector2Scale(bottom_direction, spring_force), damping_force);
     car->velocity = Vector2Add(car->velocity, force);
     wheel->velocity = Vector2Subtract(wheel->velocity, Vector2Scale(force, 0.7));
-    // wheel->position = Vector2Add(attachment_point, Vector2Scale(bottom_direction, length));
+    
 }
 
 void wheel_move(Wheel *wheel, Vector2 terrain[], int terrain_count, float dt)
@@ -207,6 +190,6 @@ void wheel_move(Wheel *wheel, Vector2 terrain[], int terrain_count, float dt)
         wheel->velocity.y += GRAVITY * dt;
     }
 
-//     float spin_speed = (wheel->velocity.x / wheel->radius) * RAD2DEG;
-//     wheel->rotation += spin_speed * dt;
- }
+
+
+}

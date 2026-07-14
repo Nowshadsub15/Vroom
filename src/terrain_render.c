@@ -18,6 +18,6 @@ void terrain_draw(Vector2 terrain[], int terrain_count)
         DrawTriangle(point1, bottom_left, bottom_right, dirtColor);
         DrawTriangle(point1, bottom_right, point2, dirtColor);
 
-        DrawLineEx(point1, point2, 15.0f, grassColor);
+        DrawLineEx(point1, point2, 15.0, grassColor);
     }
 }
