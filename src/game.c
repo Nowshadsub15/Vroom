@@ -29,8 +29,8 @@ void game_update(GameState *state, float dt)
 
     camera_update(&state->camera, car->position, car->velocity.x, dt);
 
-    int trigger_index = 200;
-    int shift_count = 100;
+    int trigger_index = 200; 
+    int shift_count = 100; 
 
     if (state->car.position.x > state->terrain[trigger_index].x)
     {

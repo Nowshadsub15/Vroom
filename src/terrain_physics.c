@@ -24,7 +24,7 @@ void terrain_generate(Vector2 terrain[],
                       int terrain_length,
                       int window_height)
 {
-    int pos = GetRandomValue(window_height * 0.7,
+    int pos = GetRandomValue(window_height * 0.35,
                              window_height * 0.95);
 
     for (int i = 0; i < terrain_count; i++)
@@ -58,19 +58,24 @@ void terrain_shift(Vector2 terrain[], int terrain_count, int terrain_length, int
 
     Vector2 last = terrain[keep_count - 1];
     int window_height = GetScreenHeight() ;
-    int base_y = GetScreenHeight()*0.7f; 
-
-    for(int i = keep_count; i < terrain_count; i++)
+    int pos = last.y ;
+    int max_height = window_height * 0.35 ;
+    int min_hight = window_height * 0.95 ;
+    int drag = 15 ;
+    for (int i = keep_count; i < terrain_count; i++)
     {
-        int slope = GetRandomValue(-20, 20);
-
-        if (last.y < base_y - 150) slope += 15;
-        if (last.y > base_y + 150) slope -= 15; 
-
-        last.y += slope;
-        if (last.y < window_height * 0.35f) last.y = window_height * 0.35f;
-        if (last.y > window_height * 0.95f) last.y = window_height * 0.95f;
-        terrain[i].y = last.y;
-        last = terrain[i];
+        
+        pos += GetRandomValue(-20,20);
+        if(pos < max_height)
+            pos = max_height;
+        if(pos > min_hight)
+            pos = min_hight;
+        if(pos == max_height && terrain[i-1].y == max_height){
+            pos += drag ;
+        }    
+        if(pos == min_hight && terrain[i-1].y == min_hight){
+            pos -= drag ;
+        }
+        terrain[i].y = pos;
     }
 }
