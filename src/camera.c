@@ -34,6 +34,5 @@ void camera_update(Camera2D *camera, Vector2 target, float velocity_x, float dt)
     if (target_zoom < CAMERA_ZOOM_MIN) target_zoom = CAMERA_ZOOM_MIN;
 
     camera->zoom += (target_zoom - camera->zoom) *CAMERA_ZOOM_SPEED*dt; 
-    if (camera->zoom > CAMERA_ZOOM_MAX) camera->zoom = CAMERA_ZOOM_MAX;
-    if (camera->zoom < CAMERA_ZOOM_MIN) camera->zoom = CAMERA_ZOOM_MIN;
+    
 }
