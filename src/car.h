@@ -13,7 +13,7 @@ typedef struct Wheel
     float damping;
     float offset;
     bool on_ground;
-    float rotation;       
+        
     Texture2D texture;    
 } Wheel;
 

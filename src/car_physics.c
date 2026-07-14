@@ -207,6 +207,6 @@ void wheel_move(Wheel *wheel, Vector2 terrain[], int terrain_count, float dt)
         wheel->velocity.y += GRAVITY * dt;
     }
 
-    float spin_speed = (wheel->velocity.x / wheel->radius) * RAD2DEG;
-    wheel->rotation += spin_speed * dt;
-}
+//     float spin_speed = (wheel->velocity.x / wheel->radius) * RAD2DEG;
+//     wheel->rotation += spin_speed * dt;
+ }
