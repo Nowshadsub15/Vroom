@@ -3,20 +3,12 @@
 #include <string.h>
 
 bool IsPointBelowLine(Vector2 a, Vector2 b, Vector2 point, Vector2 *collisionPoint) {
-    if (fabs(b.x - a.x) > 1e-6) {
         float t = (point.x - a.x) / (b.x - a.x);
         if (t < 0.0f || t > 1.0f)
             return false;
         collisionPoint->x = point.x;
         collisionPoint->y = a.y + t * (b.y - a.y);
         return (point.y > collisionPoint->y);
-    } else {
-        if (fabs(point.x - a.x) > 1e-6)
-            return false;
-        collisionPoint->x = a.x;
-        collisionPoint->y = fmax(a.y, b.y);
-        return (point.y > collisionPoint->y);
-    }
 }
 
 void terrain_generate(Vector2 terrain[],
