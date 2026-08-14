@@ -15,7 +15,7 @@ GameState game_init(int window_width, int window_height)
     state.car.front_wheel.texture = wheel_tex;
     
 
-    terrain_generate(state.terrain, TERRAIN_COUNT, TERRAIN_LENGTH, window_height);
+    terrain_generate(state.terrain, window_height, state.anchors);
 
     state.camera = camera_init(window_width, window_height);
 
@@ -28,14 +28,14 @@ void game_update(GameState *state, float dt)
 
     camera_update(&state->camera, car->position, car->velocity.x, dt);
 
-    int trigger_index = 200; 
-    int shift_count = 100; 
+    int trigger_index = 850; 
+    int anchor_shift_count = 30 ;
+    int shift_count = anchor_shift_count*CONTROL_STEP; 
 
-    if (state->car.position.x > state->terrain[trigger_index].x)
-    {
+    if (state->car.position.x > state->terrain[trigger_index].x){
         float shift_x = shift_count * TERRAIN_LENGTH;
 
-        terrain_shift(state->terrain, TERRAIN_COUNT, TERRAIN_LENGTH, shift_count);
+        terrain_shift(state->terrain, shift_count,state->anchors);
 
         state->car.position.x -= shift_x;
         state->car.back_wheel.position.x -= shift_x;
@@ -44,10 +44,10 @@ void game_update(GameState *state, float dt)
     }
 
     car_control(car, dt);
-    car_move(car, state->terrain, TERRAIN_LENGTH, dt);
+    car_move(car, state->terrain, dt);
     car_rotate(car, dt);
-    wheel_move(&car->back_wheel, state->terrain, TERRAIN_COUNT, dt);
-    wheel_move(&car->front_wheel, state->terrain, TERRAIN_COUNT, dt);
+    wheel_move(&car->back_wheel, state->terrain, dt);
+    wheel_move(&car->front_wheel, state->terrain, dt);
     car_apply_suspension(car, &car->back_wheel, dt);
     car_apply_suspension(car, &car->front_wheel, dt);
 }

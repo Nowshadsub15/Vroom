@@ -7,7 +7,7 @@
 #define FRICTION 2
 #define ROTATION_SPEED 25
 #define ROTATE_BACK_SPEED 3
-#define CAR_SPEED 20
+#define CAR_SPEED 30
 #define HILL_SPEED -0.9
 
 Car car_init(Vector2 start_position, int width, int height)
@@ -94,14 +94,14 @@ void car_rotate(Car *car, float dt)
     car->angle += diff * ROTATE_BACK_SPEED * dt;
 }
 
-void car_move(Car *car, Vector2 terrain[], int terrain_length, float dt)
+void car_move(Car *car, Vector2 terrain[], float dt)
 {
     car->position.x += car->velocity.x;
     car->position.y += car->velocity.y;
 
     if (car->back_wheel.on_ground)
     {
-        int terrain_index = floor(car->back_wheel.position.x / terrain_length);
+        int terrain_index = floor(car->back_wheel.position.x / TERRAIN_LENGTH);
 
         Vector2 point1 = terrain[terrain_index];
         Vector2 point2 = terrain[terrain_index + 1];
@@ -114,7 +114,7 @@ void car_move(Car *car, Vector2 terrain[], int terrain_length, float dt)
 
     if (car->front_wheel.on_ground)
     {
-        int terrain_index = floor(car->front_wheel.position.x / terrain_length);
+        int terrain_index = floor(car->front_wheel.position.x / TERRAIN_LENGTH);
 
         Vector2 point1 = terrain[terrain_index];
         Vector2 point2 = terrain[terrain_index + 1];
@@ -163,14 +163,14 @@ void car_apply_suspension(Car *car, Wheel *wheel, float dt)
     
 }
 
-void wheel_move(Wheel *wheel, Vector2 terrain[], int terrain_count, float dt)
+void wheel_move(Wheel *wheel, Vector2 terrain[], float dt)
 {
     wheel->position.x += wheel->velocity.x;
     wheel->position.y += wheel->velocity.y;
 
     wheel->on_ground = false;
 
-    for (int i = 1; i < terrain_count; i++)
+    for (int i = 1; i < TERRAIN_COUNT; i++)
     {
         Vector2 point1 = terrain[i - 1];
         Vector2 point2 = terrain[i];

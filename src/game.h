@@ -10,6 +10,7 @@ typedef struct GameState
     Car car;
     Vector2 terrain[TERRAIN_COUNT];
     Camera2D camera;
+    float anchors[TERRAIN_COUNT/CONTROL_STEP+3] ;
     
 } GameState;
 

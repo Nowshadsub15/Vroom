@@ -16,8 +16,12 @@ void terrain_draw(Vector2 terrain[], int terrain_count)
         Vector2 bottom_right = {point2.x, bottom_y};
 
         DrawTriangle(point1, bottom_left, bottom_right, dirtColor);
-        DrawTriangle(point1, bottom_right, point2, dirtColor);
+        DrawTriangle(point1, bottom_right, point2, dirtColor); 
+        
+        DrawCircleV(point1, 8, grassColor) ;
+        DrawCircleV(point2, 8, grassColor) ;
 
-        DrawLineEx(point1, point2, 15.0, grassColor);
+        DrawLineEx(point1, point2, 16.0, grassColor);
     }
+    //DrawSplineCatmullRom(terrain, TERRAIN_COUNT, 15.0, grassColor);
 }
