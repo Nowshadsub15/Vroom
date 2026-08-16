@@ -92,7 +92,7 @@ void car_rotate(Car *car, float dt)
 {
     float angle = -Vector2LineAngle(car->back_wheel.position, car->front_wheel.position) * RAD2DEG;
     float diff = angle - car->angle;
-    car->angle += diff * ROTATE_BACK_SPEED * dt;
+    car->angle = angle;
 }
 
 void car_move(Car *car, Vector2 terrain[], float dt)
