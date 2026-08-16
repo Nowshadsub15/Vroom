@@ -37,8 +37,7 @@ void terrain_generate(Vector2 terrain[],int window_height,float anchors[])
     anchors[5] = pos ;
     anchors[6] = pos ;
     anchors[7] = pos ;
-    anchors[8] = pos + GetRandomValue(-20,20) ;
-    for(int i = 9 ; i < num_anchors ; i++){
+    for(int i = 8 ; i < num_anchors ; i++){
         int step ;
         if(i%7){
             step = GetRandomValue(-220,220) ;
@@ -51,11 +50,13 @@ void terrain_generate(Vector2 terrain[],int window_height,float anchors[])
         if(pos < min_h) pos = min_h ;
         else if(pos > max_h) pos = max_h ;
         if(pos == anchors[i-1]){
-            if(step == 0 && pos == min_h) step = -50 ;
-            else if(step == 0 && pos == max_h) step = 50 ;
+            if(step == 0 && pos == min_h) step = -110 ;
+            else if(step == 0 && pos == max_h) step = 110 ;
             if(pos == min_h || pos == max_h) pos -= step ;
-            else pos += 25 ;
+            else pos += 100 ;
         }
+        if(pos < min_h) pos = min_h ;
+        else if(pos > max_h) pos = max_h ;
         anchors[i] = pos ;
     }
     for(int i = 0 ; i < TERRAIN_COUNT ; i++){

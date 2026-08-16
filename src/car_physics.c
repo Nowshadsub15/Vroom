@@ -3,12 +3,19 @@
 #include "terrain.h"
 #include <raymath.h>
 
-#define GRAVITY 5
-#define FRICTION 2
-#define ROTATION_SPEED 25
-#define ROTATE_BACK_SPEED 3
-#define CAR_SPEED 30
-#define HILL_SPEED -0.9
+// #define GRAVITY 5
+// #define FRICTION 2
+// #define ROTATION_SPEED 25
+// #define ROTATE_BACK_SPEED 3
+// #define CAR_SPEED 30
+// #define HILL_SPEED -0.9
+#define GRAVITY 5.0         
+#define ENGINE_FORCE 30.0        
+#define BRAKE_FORCE 10.0         
+#define ROLLING_RESISTANCE 5.0    
+#define HILL_GRAVITY_COEFF -10.0   
+#define ROTATION_SPEED 25          
+#define ROTATE_BACK_SPEED 3        
 
 
 Car car_init(Vector2 start_position, int width, int height)
@@ -51,43 +58,21 @@ Car car_init(Vector2 start_position, int width, int height)
 
 void car_control(Car *car, float dt)
 {
-    // if (!car->back_wheel.on_ground && !car->front_wheel.on_ground)
-    // {
-    //     if (IsKeyDown(KEY_LEFT))
-    //     {
-    //         car->angle += ROTATION_SPEED * dt;
-    //     }
-    //     else if (IsKeyDown(KEY_RIGHT))
-    //     {
-    //         car->angle -= ROTATION_SPEED * dt;
-    //     }
-    // } //as rotation not considered ... 
+    if (!car->back_wheel.on_ground) return; // back wheel regulates control only
 
     if (IsKeyDown(KEY_RIGHT))
-    {
-        if (car->back_wheel.on_ground)
-        {
-            car->velocity.x += CAR_SPEED * dt;
-        }
-
-        if (car->front_wheel.on_ground)
-        {
-            car->velocity.x += CAR_SPEED * dt;
-        }
-    }
+        car->velocity.x += ENGINE_FORCE * dt;
     else if (IsKeyDown(KEY_LEFT))
-    {
-        if (car->back_wheel.on_ground)
-        {
-            car->velocity.x -= CAR_SPEED * dt;
-        }
+        car->velocity.x -= ENGINE_FORCE * dt;
 
-        if (car->front_wheel.on_ground)
-        {
-            car->velocity.x -= CAR_SPEED * dt;
-        }
+    if (IsKeyDown(KEY_SPACE))
+    {
+        float brake = BRAKE_FORCE * dt;
+        if (car->velocity.x > 0)      car->velocity.x = fmaxf(0, car->velocity.x - brake);
+        else if (car->velocity.x < 0) car->velocity.x = fminf(0, car->velocity.x + brake);
     }
 }
+
 void car_rotate(Car *car, float dt)
 {
     float angle = -Vector2LineAngle(car->back_wheel.position, car->front_wheel.position) * RAD2DEG;
@@ -97,38 +82,37 @@ void car_rotate(Car *car, float dt)
 
 void car_move(Car *car, Vector2 terrain[], float dt)
 {
-    car->position.x += car->velocity.x;
-    car->position.y += car->velocity.y;
-
-    if (car->back_wheel.on_ground)
+    if (car->back_wheel.on_ground || car->front_wheel.on_ground)
     {
-        int terrain_index = floor(car->back_wheel.position.x / TERRAIN_LENGTH);
-
-        Vector2 point1 = terrain[terrain_index];
-        Vector2 point2 = terrain[terrain_index + 1];
-
-        float angle = Vector2LineAngle(point1, point2) * RAD2DEG;
-        car->velocity.x += angle * HILL_SPEED * dt;
-        float friction = car->velocity.x * FRICTION;
-        car->velocity.x -= friction * dt;
+        float angle_sum = 0; 
+        int count = 0;
+        if(car->back_wheel.on_ground){
+            int i = floorf(car->back_wheel.position.x / TERRAIN_LENGTH) ;
+            angle_sum += Vector2LineAngle(terrain[i],terrain[i+1]) ;
+            count++ ;
+        }
+        if(car->front_wheel.on_ground){
+            int i = floorf(car->front_wheel.position.x / TERRAIN_LENGTH) ;
+            angle_sum += Vector2LineAngle(terrain[i],terrain[i+1]) ;
+            count++ ;
+        }
+        float slope_angle = angle_sum/count ;
+        car->velocity.x += GRAVITY * sinf(slope_angle) *HILL_GRAVITY_COEFF*dt ;
+        if(car->back_wheel.on_ground){
+            float roll = ROLLING_RESISTANCE * dt;
+            if (car->velocity.x > 0)      car->velocity.x = fmaxf(0, car->velocity.x - roll);
+            else if (car->velocity.x < 0) car->velocity.x = fminf(0, car->velocity.x + roll);
+        }
+        if(car->front_wheel.on_ground){
+            float roll = ROLLING_RESISTANCE * dt;
+            if (car->velocity.x > 0)      car->velocity.x = fmaxf(0, car->velocity.x - roll);
+            else if (car->velocity.x < 0) car->velocity.x = fminf(0, car->velocity.x + roll);
+        }
     }
-
-    if (car->front_wheel.on_ground)
-    {
-        int terrain_index = floor(car->front_wheel.position.x / TERRAIN_LENGTH);
-
-        Vector2 point1 = terrain[terrain_index];
-        Vector2 point2 = terrain[terrain_index + 1];
-
-        float angle = Vector2LineAngle(point1, point2) * RAD2DEG;
-        car->velocity.x += angle * HILL_SPEED * dt;
-        float friction = car->velocity.x * FRICTION;
-        car->velocity.x -= friction * dt;
-    }
-
     
     car->velocity.y += GRAVITY * dt;
-
+    car->position.x += car->velocity.x;
+    car->position.y += car->velocity.y;
     if (car->position.x < terrain[0].x + (car->width) * 3)
     {
         car->position.x = terrain[0].x + (car->width) * 3;
@@ -138,6 +122,7 @@ void car_move(Car *car, Vector2 terrain[], float dt)
             car->velocity.x = 0;
         }
     }
+    
 }
 
 void car_apply_suspension(Car *car, Wheel *wheel, float dt)
@@ -164,8 +149,17 @@ void car_apply_suspension(Car *car, Wheel *wheel, float dt)
 
 }
 
-void wheel_move(Wheel *wheel, Vector2 terrain[], float dt)
+void wheel_move(Car*car, Wheel *wheel, Vector2 terrain[], float dt)
 {
+    Vector2 bottom_direction = Vector2Rotate((Vector2){0, 1}, car->angle * DEG2RAD);
+    Vector2 attachment_point = Vector2Rotate((Vector2){-car->width / 2 + wheel->padding + wheel->radius + wheel->offset, 0}, car->angle * DEG2RAD);
+    attachment_point = Vector2Add(attachment_point, car->position);
+    
+    float length = Vector2Distance(wheel->position, attachment_point);
+    float resting_length = car->height / 2 + wheel->padding + wheel->radius;
+    float strech = length - resting_length;
+    
+    wheel->position = Vector2Add(attachment_point, Vector2Scale(bottom_direction, length));
     wheel->position.x += wheel->velocity.x;
     wheel->position.y += wheel->velocity.y;
 
