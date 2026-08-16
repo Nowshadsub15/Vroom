@@ -10,6 +10,7 @@
 #define CAR_SPEED 30
 #define HILL_SPEED -0.9
 
+
 Car car_init(Vector2 start_position, int width, int height)
 {
     Car car = {
@@ -160,7 +161,7 @@ void car_apply_suspension(Car *car, Wheel *wheel, float dt)
     force = Vector2Scale(force,dt) ;
     car->velocity = Vector2Add(car->velocity, force);
     wheel->velocity = Vector2Subtract(wheel->velocity, Vector2Scale(force, 0.7));
-    
+
 }
 
 void wheel_move(Wheel *wheel, Vector2 terrain[], float dt)
