@@ -4,8 +4,8 @@ GameState game_init(int window_width, int window_height)
 {    
     GameState state = {0};
 
-    Texture2D car_tex = LoadTexture("assets/car_body.png");
-    Texture2D wheel_tex = LoadTexture("assets/wheel.png");
+    Texture2D car_tex = LoadTexture("assets/car.png");
+    Texture2D wheel_tex = LoadTexture("assets/wheeel.png");
 
     Vector2 start_position = {1200, 300};
     state.car = car_init(start_position, 250, 100);
@@ -58,6 +58,8 @@ void game_draw(GameState *state)
 
     terrain_draw(state->terrain, TERRAIN_COUNT);
     car_draw(&state->car);
+    int num_anchors = TERRAIN_COUNT / CONTROL_STEP + 3;
+    terrain_draw_anchors(state->anchors, num_anchors);
 
     EndMode2D();
 }

@@ -25,3 +25,16 @@ void terrain_draw(Vector2 terrain[], int terrain_count)
     }
     //DrawSplineCatmullRom(terrain, TERRAIN_COUNT, 15.0, grassColor);
 }
+void terrain_draw_anchors(float anchors[], int num_anchors)
+{
+    Color anchorColor = (Color){255, 0, 0, 255}; // red, easy to spot
+
+    for (int i = 0; i < num_anchors; i++)
+    {
+        float x = i * CONTROL_STEP * TERRAIN_LENGTH;
+        float y = anchors[i];
+
+        DrawCircleV((Vector2){x, y}, 12, anchorColor);
+        DrawText(TextFormat("%d", i), x - 8, y - 30, 16, BLACK); // optional index label
+    }
+}

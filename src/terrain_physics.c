@@ -53,7 +53,7 @@ void terrain_generate(Vector2 terrain[],int window_height,float anchors[])
         if(pos == anchors[i-1]){
             if(step == 0 && pos == min_h) step = -50 ;
             else if(step == 0 && pos == max_h) step = 50 ;
-            if(pos == min_h || pos == max_h) pos -= step ;
+            else if(pos == min_h || pos == max_h) pos -= step ;
             else pos += 25 ;
         }
         anchors[i] = pos ;
@@ -98,8 +98,8 @@ void terrain_shift(Vector2 terrain[], int shift_count, float anchors[])
         if(pos == anchors[i-1]){
             if(step == 0 && pos == min_h) step = -50 ;
             else if(step == 0 && pos == max_h) step = 50 ;
-            if(pos == min_h || pos == max_h) pos -= step ;
-            else pos += 25 ;
+            else if(pos == min_h || pos == max_h) pos -= step ;
+            else pos += 50 ;
         }
         anchors[i] = pos ;
     }
