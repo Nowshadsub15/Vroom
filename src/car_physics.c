@@ -156,6 +156,7 @@ void car_apply_suspension(Car *car, Wheel *wheel, float dt)
     float resting_length = car->height / 2 + wheel->padding + wheel->radius;
     float strech = length - resting_length;
     
+    //wheel->position.x = attachment_point.x ;
     wheel->position = Vector2Add(attachment_point, Vector2Scale(bottom_direction, length));
 
     float spring_force = strech * wheel->stiffness ;
@@ -172,7 +173,7 @@ void car_apply_suspension(Car *car, Wheel *wheel, float dt)
 
 void wheel_move(Wheel *wheel, Vector2 terrain[], float dt)
 {
-    //wheel->position.x += wheel->velocity.x;
+    wheel->position.x += wheel->velocity.x;
     wheel->position.y += wheel->velocity.y;
 
     wheel->on_ground = false;

@@ -2,12 +2,6 @@
 
 void car_draw(Car *car)
 {
-    // Plain rectangle placeholder, exactly car->width x car->height, centered
-    // and rotated the same way the textured body was.
-    Rectangle bodyRect = { car->position.x, car->position.y, (float)car->width, (float)car->height };
-    Vector2 bodyOrigin = { car->width / 2.0f, car->height / 2.0f };
-
-    DrawRectanglePro(bodyRect, bodyOrigin, car->angle, RED);
 
     Rectangle sourceBody = { 0.0, 0.0, (float)car->texture.width, (float)car->texture.height };
     Rectangle destBody = { car->position.x, car->position.y, (float)car->width, (float)car->height }; 
