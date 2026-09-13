@@ -30,9 +30,9 @@ void fuel_update(FuelSystem *fuel, Car *car, Vector2 terrain[], float dt)
         fuel->amount -= FUEL_DRAIN_RATE * dt;
         if(IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_LEFT)){
             if(car->back_wheel.on_ground)
-            fuel->amount -= fabs(car->velocity.x) * 0.9 * dt ;
+            fuel->amount -= fabs(car->velocity.x) * 0.2 * dt ;
             if(car->front_wheel.on_ground)
-            fuel->amount -= fabs(car->velocity.x) * 0.9 * dt ;
+            fuel->amount -= fabs(car->velocity.x) * 0.2 * dt ;
             fuel->amount -= car->velocity.x * 0.2 * dt ;
         }
         if (fuel->amount < 0)
@@ -66,6 +66,7 @@ void fuel_update(FuelSystem *fuel, Car *car, Vector2 terrain[], float dt)
                 fuel->amount = FUEL_MAX;
             }
             fuel->pickup_active = false;
+            fuel->distance_since_pickup = 0;
         }
     }
 }

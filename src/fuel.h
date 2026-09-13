@@ -10,7 +10,7 @@
 #define FUEL_PICKUP_AMOUNT 35.0
 #define FUEL_PICKUP_SPACING 3000.0
 #define FUEL_PICKUP_RADIUS 28.0
-#define FUEL_PICKUP_AHEAD 700.0
+#define FUEL_PICKUP_AHEAD 1000.0
 
 typedef struct FuelSystem
 {
