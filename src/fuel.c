@@ -1,13 +1,14 @@
 #include "fuel.h"
 #include <math.h>
 #include <raymath.h>
-
+#include <stdio.h>
 FuelSystem fuel_init(void)
 {
     FuelSystem fuel = {0};
     fuel.amount = FUEL_MAX;
     fuel.distance_since_pickup = FUEL_PICKUP_SPACING;
     fuel.pickup_active = false;
+    fuel.current_spacing = FUEL_PICKUP_SPACING;
 
     return fuel;
 }
@@ -27,13 +28,14 @@ void fuel_update(FuelSystem *fuel, Car *car, Vector2 terrain[], float dt)
 {
     if (fuel->amount > 0)
     {
-        fuel->amount -= FUEL_DRAIN_RATE * dt;
-        if(IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_LEFT)){
-            if(car->back_wheel.on_ground)
-            fuel->amount -= fabs(car->velocity.x) * 0.2 * dt ;
-            if(car->front_wheel.on_ground)
-            fuel->amount -= fabs(car->velocity.x) * 0.2 * dt ;
-            fuel->amount -= car->velocity.x * 0.2 * dt ;
+        fuel->amount -= FUEL_DRAIN_RATE * dt*0;
+        if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_LEFT))
+        {
+            if (car->back_wheel.on_ground)
+                fuel->amount -= fabs(car->velocity.x) * 0.00002 * dt;
+            if (car->front_wheel.on_ground)
+                fuel->amount -= fabs(car->velocity.x) * 0.0000002 * dt;
+            fuel->amount -= car->velocity.x * 0.02 * dt;
         }
         if (fuel->amount < 0)
         {
@@ -42,16 +44,23 @@ void fuel_update(FuelSystem *fuel, Car *car, Vector2 terrain[], float dt)
     }
 
     fuel->distance_since_pickup += fabsf(car->velocity.x);
+    
 
-    if (!fuel->pickup_active && fuel->distance_since_pickup >= FUEL_PICKUP_SPACING)
+    if (fuel->pickup_active==false && fuel->distance_since_pickup >= fuel->current_spacing)
     {
         float spawn_x = car->position.x + FUEL_PICKUP_AHEAD;
 
         float spawn_y = terrain_height_at(terrain, spawn_x) - FUEL_PICKUP_RADIUS - 45;
 
+        fuel->current_spacing += FUEL_SPACING_INCREAMENT;
+
+        // if (fuel->current_spacing >= FUEL_SPACING_MAX)
+        // {
+        //     fuel->current_spacing = FUEL_SPACING_MAX;
+        // }
+
         fuel->pickup_position = (Vector2){spawn_x, spawn_y};
         fuel->pickup_active = true;
-        fuel->distance_since_pickup = 0;
     }
 
     if (fuel->pickup_active)
@@ -86,25 +95,25 @@ bool fuel_is_empty(FuelSystem *fuel)
 
 void fuel_draw_pickup(FuelSystem *fuel)
 {
-    if (!fuel->pickup_active)
+    if (fuel->pickup_active == false)
     {
         return;
     }
 
     Vector2 pos = fuel->pickup_position;
-    Rectangle source = {0,0,fuel->tex.width, fuel->tex.height} ;
-    Rectangle dest = {pos.x, pos.y, 56,70} ;
-    Vector2 origin = {28, 35} ;
-    DrawTexturePro(fuel->tex, source, dest, origin, 0, WHITE) ;
+    Rectangle source = {0, 0, fuel->tex.width, fuel->tex.height};
+    Rectangle dest = {pos.x, pos.y, 56, 70};
+    Vector2 origin = {28, 35};
+    DrawTexturePro(fuel->tex, source, dest, origin, 0, WHITE);
 
-//     Color body = (Color){235, 190, 40, 255};
-//     Color outline = (Color){120, 90, 10, 255};
+    //     Color body = (Color){235, 190, 40, 255};
+    //     Color outline = (Color){120, 90, 10, 255};
 
-//     Rectangle can = {pos.x - 26, pos.y - 35, 56, 70};                    // can
-//     DrawRectangleRounded(can, 0.3f, 6, body);                            // adds color in can and rounded edge
-//     DrawRectangleRoundedLines(can, 0.3f, 6, outline);                    // outline
-//     DrawRectangle((int)(pos.x - 6), (int)(pos.y - 26), 12, 10, outline); // another rectangle
-//     DrawText("F", (int)(pos.x - 5), (int)(pos.y - 9), 20, outline);
+    //     Rectangle can = {pos.x - 26, pos.y - 35, 56, 70};                    // can
+    //     DrawRectangleRounded(can, 0.3f, 6, body);                            // adds color in can and rounded edge
+    //     DrawRectangleRoundedLines(can, 0.3f, 6, outline);                    // outline
+    //     DrawRectangle((int)(pos.x - 6), (int)(pos.y - 26), 12, 10, outline); // another rectangle
+    //     DrawText("F", (int)(pos.x - 5), (int)(pos.y - 9), 20, outline);
 }
 
 void fuel_draw_bar(FuelSystem *fuel, int window_width, Font temp)
@@ -133,11 +142,10 @@ void fuel_draw_bar(FuelSystem *fuel, int window_width, Font temp)
     DrawRectangle(bar_x, bar_y, bar_w, bar_h, (Color){30, 30, 30, 180});
     DrawRectangle(bar_x + 3, bar_y + 3, (int)((bar_w - 6) * ratio), bar_h - 6, fill_color);
     DrawRectangleLines(bar_x, bar_y, bar_w, bar_h, WHITE);
-    DrawTextEx(temp,"FUEL", (Vector2){bar_x, bar_y - 60}, 70, 0,WHITE);
-    
+    DrawTextEx(temp, "FUEL", (Vector2){bar_x, bar_y - 60}, 70, 0, WHITE);
 
     if (fuel_is_empty(fuel))
     {
-        DrawTextEx(temp, "OUT OF FUEL", (Vector2){bar_x - 30, bar_y + bar_h + 30}, 60, 0,RED);
+        DrawTextEx(temp, "OUT OF FUEL", (Vector2){bar_x - 30, bar_y + bar_h + 30}, 60, 0, RED);
     }
 }

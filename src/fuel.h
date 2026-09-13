@@ -11,6 +11,9 @@
 #define FUEL_PICKUP_SPACING 3000.0
 #define FUEL_PICKUP_RADIUS 28.0
 #define FUEL_PICKUP_AHEAD 1000.0
+#define FUEL_SPACING_INCREAMENT 1000.0
+#define FUEL_SPACING_MAX 150000.0
+
 
 typedef struct FuelSystem
 {
@@ -20,6 +23,7 @@ typedef struct FuelSystem
     Vector2 pickup_position;
     Texture2D tex ; 
     Font temp ;
+    float current_spacing;
 }FuelSystem;
 
 FuelSystem fuel_init(void);
