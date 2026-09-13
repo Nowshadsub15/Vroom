@@ -31,11 +31,11 @@ void fuel_update(FuelSystem *fuel, Car *car, Vector2 terrain[], float dt)
         fuel->amount -= FUEL_DRAIN_RATE * dt*0;
         if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_LEFT))
         {
-            if (car->back_wheel.on_ground)
-                fuel->amount -= fabs(car->velocity.x) * 0.00002 * dt;
+            if (car->back_wheel.on_ground){}
+                fuel->amount -= fabs(car->velocity.x) * 0.2 * dt;
             if (car->front_wheel.on_ground)
-                fuel->amount -= fabs(car->velocity.x) * 0.0000002 * dt;
-            fuel->amount -= car->velocity.x * 0.02 * dt;
+                fuel->amount -= fabs(car->velocity.x) * 0.2 * dt;
+            //fuel->amount -= car->velocity.x * 0.02 * dt;
         }
         if (fuel->amount < 0)
         {
