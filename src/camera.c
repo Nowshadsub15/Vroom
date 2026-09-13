@@ -1,8 +1,8 @@
 #include "camera.h"
 #include <math.h>
 
-#define CAMERA_ZOOM_MAX 1.3
-#define CAMERA_ZOOM_MIN 0.5
+#define CAMERA_ZOOM_MAX 0.8
+#define CAMERA_ZOOM_MIN 0.7
 #define CAMERA_ZOOM_SPEED 1.0
 
 Camera2D camera_init(int window_width, int window_height)
