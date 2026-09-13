@@ -2,3 +2,4 @@ vroom
 *.o
 .vscode
 game
+assets/highestscore.txt

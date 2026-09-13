@@ -1,7 +1,7 @@
 #include "score.h"
 #include <stdio.h>
 
-#define FILENAME "highestscore.txt"
+#define FILENAME "assets/highestscore.txt"
 
 int score_load_high_score(void)
 {
@@ -97,6 +97,6 @@ void score_draw(ScoreSystem *score, Font font)
     snprintf(high_str, sizeof(high_str), "HIGH SCORE : %d m", score->high_score);
     snprintf(curr_str, sizeof(curr_str), "SCORE      : %d m", score->current_score);
 
-    DrawTextEx(font, high_str, (Vector2){40, 30}, 40, 0, YELLOW);
-    DrawTextEx(font, curr_str, (Vector2){40, 80}, 40, 0, WHITE);
+    DrawTextEx(font, high_str, (Vector2){40, 30}, 65, 0, YELLOW);
+    DrawTextEx(font, curr_str, (Vector2){40, 105}, 65, 0, WHITE);
 }
