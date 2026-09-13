@@ -4,8 +4,8 @@ GameState game_init(int window_width, int window_height)
 {
     GameState state = {0};
 
-    Texture2D car_tex = LoadTexture("assets/car_body.png");
-    Texture2D wheel_tex = LoadTexture("assets/wheel.png");
+    Texture2D car_tex = LoadTexture("assets/car.png");
+    Texture2D wheel_tex = LoadTexture("assets/wheeel.png");
     Texture2D fuel_tex = LoadTexture("assets/fuel.png") ;
     
 
