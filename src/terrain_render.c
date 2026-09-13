@@ -23,5 +23,4 @@ void terrain_draw(Vector2 terrain[], int terrain_count)
 
         DrawLineEx(point1, point2, 16.0, grassColor);
     }
-    //DrawSplineCatmullRom(terrain, TERRAIN_COUNT, 15.0, grassColor);
 }

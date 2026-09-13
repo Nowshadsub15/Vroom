@@ -22,28 +22,29 @@ Car car_init(Vector2 start_position, int width, int height)
 
     car.back_wheel = (Wheel){
         .radius = 25,
-        .padding = 10,
+        .padding = 0,
         .stiffness = 0.8,
         .damping = 2.3,
     };
 
     car.back_wheel.position = (Vector2){
-        .x = car.position.x - car.width / 2 + car.back_wheel.radius + car.back_wheel.padding,
-        .y = car.position.y + car.height / 2 + car.back_wheel.radius + car.back_wheel.padding,
+        .x = car.position.x - 60,
+        .y = car.position.y + 50,
     };
 
     car.front_wheel = (Wheel){
         .radius = 25,
-        .padding = 10,
+        .padding = 0,
         .stiffness = 0.8,
         .damping = 2.3,
     };
 
-    car.front_wheel.offset = car.width - car.back_wheel.radius - car.back_wheel.padding - car.front_wheel.padding - car.front_wheel.radius;
+    car.back_wheel.offset = 41 ;
+    car.front_wheel.offset = 186;
 
     car.front_wheel.position = (Vector2){
-        .x = car.position.x + car.width / 2 - car.front_wheel.radius - car.front_wheel.padding,
-        .y = car.position.y + car.height / 2 + car.front_wheel.radius + car.front_wheel.padding,
+        .x = car.position.x + 61.3,
+        .y = car.position.y + 50,
     };
 
     return car;
@@ -51,18 +52,6 @@ Car car_init(Vector2 start_position, int width, int height)
 
 void car_control(Car *car, float dt)
 {
-    // if (!car->back_wheel.on_ground && !car->front_wheel.on_ground)
-    // {
-    //     if (IsKeyDown(KEY_LEFT))
-    //     {
-    //         car->angle += ROTATION_SPEED * dt;
-    //     }
-    //     else if (IsKeyDown(KEY_RIGHT))
-    //     {
-    //         car->angle -= ROTATION_SPEED * dt;
-    //     }
-    // } //as rotation not considered ... 
-
     if (IsKeyDown(KEY_RIGHT))
     {
         if (car->back_wheel.on_ground)
@@ -88,6 +77,7 @@ void car_control(Car *car, float dt)
         }
     }
 }
+
 void car_rotate(Car *car, float dt)
 {
     float angle = -Vector2LineAngle(car->back_wheel.position, car->front_wheel.position) * RAD2DEG;
@@ -144,7 +134,11 @@ void car_apply_suspension(Car *car, Wheel *wheel, float dt)
 {
     Vector2 bottom_direction = Vector2Rotate((Vector2){0, 1}, car->angle * DEG2RAD);
     Vector2 attachment_point = Vector2Rotate((Vector2){-car->width / 2 + wheel->padding + wheel->radius + wheel->offset, 0}, car->angle * DEG2RAD);
-    attachment_point = Vector2Add(attachment_point, car->position);
+    Vector2 temp = {
+        .x = car->position.x,
+        .y = car->position.y-19,
+    };
+    attachment_point = Vector2Add(attachment_point, temp);
     
     float length = Vector2Distance(wheel->position, attachment_point);
     float resting_length = car->height / 2 + wheel->padding + wheel->radius;
@@ -161,7 +155,6 @@ void car_apply_suspension(Car *car, Wheel *wheel, float dt)
     force = Vector2Scale(force,dt) ;
     car->velocity = Vector2Add(car->velocity, force);
     wheel->velocity = Vector2Subtract(wheel->velocity, Vector2Scale(force, 0.7));
-
 }
 
 void wheel_move(Wheel *wheel, Vector2 terrain[], float dt)
@@ -186,12 +179,5 @@ void wheel_move(Wheel *wheel, Vector2 terrain[], float dt)
             wheel->on_ground = true;
         }
     }
-
-    if (!wheel->on_ground)
-    {
-        wheel->velocity.y += GRAVITY * dt;
-    }
-
-
-
+    wheel->velocity.y += GRAVITY * dt;
 }

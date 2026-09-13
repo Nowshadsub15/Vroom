@@ -7,6 +7,7 @@ GameState game_init(int window_width, int window_height)
     Texture2D car_tex = LoadTexture("assets/car_body.png");
     Texture2D wheel_tex = LoadTexture("assets/wheel.png");
     Texture2D fuel_tex = LoadTexture("assets/fuel.png") ;
+    
 
     Vector2 start_position = {1200, 300};
     state.car = car_init(start_position, 250, 100);
