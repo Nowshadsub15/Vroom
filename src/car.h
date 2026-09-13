@@ -12,6 +12,7 @@ typedef struct Wheel
     float stiffness;
     float damping;
     float offset;
+    float angle;
     bool on_ground;
         
     Texture2D texture;    

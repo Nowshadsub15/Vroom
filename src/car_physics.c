@@ -9,6 +9,7 @@
 #define ROTATE_BACK_SPEED 3
 #define CAR_SPEED 30
 #define HILL_SPEED -0.9
+#define WHEEL_ROTATION_SPEED 1000
 
 
 Car car_init(Vector2 start_position, int width, int height)
@@ -54,6 +55,8 @@ void car_control(Car *car, float dt)
 {
     if (IsKeyDown(KEY_RIGHT))
     {
+          car->back_wheel.angle += WHEEL_ROTATION_SPEED * dt;
+    car->front_wheel.angle += WHEEL_ROTATION_SPEED * dt;
         if (car->back_wheel.on_ground)
         {
             car->velocity.x += CAR_SPEED * dt;
@@ -66,6 +69,8 @@ void car_control(Car *car, float dt)
     }
     else if (IsKeyDown(KEY_LEFT))
     {
+            car->back_wheel.angle -= WHEEL_ROTATION_SPEED * dt;
+    car->front_wheel.angle -= WHEEL_ROTATION_SPEED * dt;
         if (car->back_wheel.on_ground)
         {
             car->velocity.x -= CAR_SPEED * dt;
@@ -180,4 +185,5 @@ void wheel_move(Wheel *wheel, Vector2 terrain[], float dt)
         }
     }
     wheel->velocity.y += GRAVITY * dt;
+    wheel->angle += wheel->velocity.x * WHEEL_ROTATION_SPEED/20 * dt;
 }
