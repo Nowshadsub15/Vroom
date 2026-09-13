@@ -6,6 +6,7 @@ GameState game_init(int window_width, int window_height)
 
     Texture2D car_tex = LoadTexture("assets/car_body.png");
     Texture2D wheel_tex = LoadTexture("assets/wheel.png");
+    Texture2D fuel_tex = LoadTexture("assets/fuel.png") ;
 
     Vector2 start_position = {1200, 300};
     state.car = car_init(start_position, 250, 100);
@@ -19,6 +20,8 @@ GameState game_init(int window_width, int window_height)
     state.camera = camera_init(window_width, window_height);
 
     state.fuel = fuel_init();
+    state.fuel.tex = fuel_tex ;
+    state.fuel.temp = LoadFont("assets/ANTEORS.ttf");
 
     return state;
 }
@@ -70,5 +73,5 @@ void game_draw(GameState *state)
 
     EndMode2D();
 
-    fuel_draw_bar(&state->fuel, GetScreenWidth()); // bcoz it is fixed
+    fuel_draw_bar(&state->fuel, GetScreenWidth(),state->fuel.temp); // bcoz it is fixed
 }

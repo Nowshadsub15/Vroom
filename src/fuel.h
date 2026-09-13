@@ -5,12 +5,12 @@
 #include "car.h"
 #include "terrain.h"
 
-#define FUEL_MAX 100.0f
-#define FUEL_DRAIN_RATE 3.0f
-#define FUEL_PICKUP_AMOUNT 35.0f
-#define FUEL_PICKUP_SPACING 3000.0f
-#define FUEL_PICKUP_RADIUS 18.0f
-#define FUEL_PICKUP_AHEAD 700.0f
+#define FUEL_MAX 100.0
+#define FUEL_DRAIN_RATE 5.0
+#define FUEL_PICKUP_AMOUNT 35.0
+#define FUEL_PICKUP_SPACING 3000.0
+#define FUEL_PICKUP_RADIUS 28.0
+#define FUEL_PICKUP_AHEAD 700.0
 
 typedef struct FuelSystem
 {
@@ -18,6 +18,8 @@ typedef struct FuelSystem
     float distance_since_pickup;
     bool pickup_active;
     Vector2 pickup_position;
+    Texture2D tex ; 
+    Font temp ;
 }FuelSystem;
 
 FuelSystem fuel_init(void);
@@ -26,7 +28,7 @@ void fuel_shift(FuelSystem *fuel, float shift_x);
 bool fuel_is_empty(FuelSystem *fuel);
 
 void fuel_draw_pickup(FuelSystem *fuel);
-void fuel_draw_bar(FuelSystem *fuel, int window_width);
+void fuel_draw_bar(FuelSystem *fuel, int window_width, Font temp);
 
 #endif
 
