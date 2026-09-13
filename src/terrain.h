@@ -12,5 +12,4 @@ bool IsPointBelowLine(Vector2 a, Vector2 b, Vector2 point, Vector2 *collisionPoi
 void terrain_generate(Vector2 terrain[], int window_height, float anchors[]);
 void terrain_draw(Vector2 terrain[], int terrain_count);
 void terrain_shift(Vector2 terrain[], int shift_count, float anchors[]);
-void terrain_draw_anchors(float anchors[], int num_anchors);
 #endif

@@ -58,8 +58,6 @@ void game_draw(GameState *state)
 
     terrain_draw(state->terrain, TERRAIN_COUNT);
     car_draw(&state->car);
-    int num_anchors = TERRAIN_COUNT / CONTROL_STEP + 3;
-    terrain_draw_anchors(state->anchors, num_anchors);
 
     EndMode2D();
 }

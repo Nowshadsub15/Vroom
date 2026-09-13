@@ -52,18 +52,6 @@ Car car_init(Vector2 start_position, int width, int height)
 
 void car_control(Car *car, float dt)
 {
-    // if (!car->back_wheel.on_ground && !car->front_wheel.on_ground)
-    // {
-    //     if (IsKeyDown(KEY_LEFT))
-    //     {
-    //         car->angle += ROTATION_SPEED * dt;
-    //     }
-    //     else if (IsKeyDown(KEY_RIGHT))
-    //     {
-    //         car->angle -= ROTATION_SPEED * dt;
-    //     }
-    // } //as rotation not considered ... 
-
     if (IsKeyDown(KEY_RIGHT))
     {
         if (car->back_wheel.on_ground)
@@ -156,7 +144,6 @@ void car_apply_suspension(Car *car, Wheel *wheel, float dt)
     float resting_length = car->height / 2 + wheel->padding + wheel->radius;
     float strech = length - resting_length;
     
-    //wheel->position.x = attachment_point.x ;
     wheel->position = Vector2Add(attachment_point, Vector2Scale(bottom_direction, length));
 
     float spring_force = strech * wheel->stiffness ;
@@ -168,7 +155,6 @@ void car_apply_suspension(Car *car, Wheel *wheel, float dt)
     force = Vector2Scale(force,dt) ;
     car->velocity = Vector2Add(car->velocity, force);
     wheel->velocity = Vector2Subtract(wheel->velocity, Vector2Scale(force, 0.7));
-
 }
 
 void wheel_move(Wheel *wheel, Vector2 terrain[], float dt)
@@ -193,12 +179,5 @@ void wheel_move(Wheel *wheel, Vector2 terrain[], float dt)
             wheel->on_ground = true;
         }
     }
-
-    //if (wheel->on_ground)
-    {
-        wheel->velocity.y += GRAVITY * dt;
-    }
-
-
-
+    wheel->velocity.y += GRAVITY * dt;
 }
