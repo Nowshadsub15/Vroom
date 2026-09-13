@@ -4,6 +4,7 @@
 #include "car.h"
 #include "terrain.h"
 #include "camera.h"
+#include "fuel.h"
 
 typedef struct GameState
 {
@@ -11,6 +12,7 @@ typedef struct GameState
     Vector2 terrain[TERRAIN_COUNT];
     Camera2D camera;
     float anchors[TERRAIN_COUNT/CONTROL_STEP+3] ;
+    FuelSystem fuel;
     
 } GameState;
 
@@ -19,3 +21,4 @@ void game_update(GameState *state, float dt);
 void game_draw(GameState *state);
 
 #endif
+
