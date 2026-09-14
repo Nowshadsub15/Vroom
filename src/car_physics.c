@@ -2,13 +2,14 @@
 #include "car.h"
 #include "terrain.h"
 #include <raymath.h>
+#include <stdio.h>
 
 #define GRAVITY 5
 #define FRICTION 0.15
 #define ROTATION_SPEED 25
 #define ROTATE_BACK_SPEED 3
-#define CAR_SPEED 16
-#define HILL_SPEED -0.9
+#define CAR_SPEED 15
+#define HILL_SPEED -0.6
 #define WHEEL_ROTATION_SPEED 1000
 
 
@@ -24,8 +25,8 @@ Car car_init(Vector2 start_position, int width, int height)
     car.back_wheel = (Wheel){
         .radius = 25,
         .padding = 0,
-        .stiffness = 1,
-        .damping = 2.3,
+        .stiffness = 2,
+        .damping = 5.3,
     };
 
     car.back_wheel.position = (Vector2){
@@ -36,8 +37,8 @@ Car car_init(Vector2 start_position, int width, int height)
     car.front_wheel = (Wheel){
         .radius = 25,
         .padding = 0,
-        .stiffness = 1,
-        .damping = 2.3,
+        .stiffness = 2,
+        .damping = 5.3,
     };
 
     car.back_wheel.offset = 41 ;
@@ -55,8 +56,8 @@ void car_control(Car *car, float dt)
 {
     if (IsKeyDown(KEY_RIGHT))
     {
-          car->back_wheel.angle += WHEEL_ROTATION_SPEED * dt;
-    car->front_wheel.angle += WHEEL_ROTATION_SPEED * dt;
+        car->back_wheel.angle += WHEEL_ROTATION_SPEED * dt;
+        car->front_wheel.angle += WHEEL_ROTATION_SPEED * dt;
         if (car->back_wheel.on_ground)
         {
             car->velocity.x += CAR_SPEED * dt;
@@ -69,8 +70,8 @@ void car_control(Car *car, float dt)
     }
     else if (IsKeyDown(KEY_LEFT))
     {
-            car->back_wheel.angle -= WHEEL_ROTATION_SPEED * dt;
-    car->front_wheel.angle -= WHEEL_ROTATION_SPEED * dt;
+        car->back_wheel.angle -= WHEEL_ROTATION_SPEED * dt;
+        car->front_wheel.angle -= WHEEL_ROTATION_SPEED * dt;
         if (car->back_wheel.on_ground)
         {
             car->velocity.x -= CAR_SPEED * dt;
@@ -92,8 +93,10 @@ void car_rotate(Car *car, float dt)
 
 void car_move(Car *car, Vector2 terrain[], float dt)
 {
+    if((car->velocity.x) > 18.0) car->velocity.x = 18 ;
     car->position.x += car->velocity.x;
     car->position.y += car->velocity.y;
+    
 
     if (car->back_wheel.on_ground)
     {
@@ -141,7 +144,7 @@ void car_apply_suspension(Car *car, Wheel *wheel, float dt)
     Vector2 attachment_point = Vector2Rotate((Vector2){-car->width / 2 + wheel->padding + wheel->radius + wheel->offset, 0}, car->angle * DEG2RAD);
     Vector2 temp = {
         .x = car->position.x,
-        .y = car->position.y-19,
+        .y = car->position.y-16,
     };
     attachment_point = Vector2Add(attachment_point, temp);
     

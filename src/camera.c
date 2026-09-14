@@ -8,7 +8,7 @@
 Camera2D camera_init(int window_width, int window_height)
 {
     Camera2D camera = {
-        .offset = (Vector2) {window_width / 2, window_height / 2},
+        .offset = (Vector2) {window_width / 2-500, window_height / 2},
         .target = (Vector2) {0, 0},
         .rotation = 0,
         .zoom = 1,

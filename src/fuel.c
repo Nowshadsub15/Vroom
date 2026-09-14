@@ -28,7 +28,7 @@ void fuel_update(FuelSystem *fuel, Car *car, Vector2 terrain[], float dt)
 {
     if (fuel->amount > 0)
     {
-        fuel->amount -= FUEL_DRAIN_RATE * dt*0;
+        fuel->amount -= FUEL_DRAIN_RATE * dt;
         if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_LEFT))
         {
             if (car->back_wheel.on_ground){}
@@ -54,10 +54,10 @@ void fuel_update(FuelSystem *fuel, Car *car, Vector2 terrain[], float dt)
 
         fuel->current_spacing += FUEL_SPACING_INCREAMENT;
 
-        // if (fuel->current_spacing >= FUEL_SPACING_MAX)
-        // {
-        //     fuel->current_spacing = FUEL_SPACING_MAX;
-        // }
+        if (fuel->current_spacing >= FUEL_SPACING_MAX)
+        {
+            fuel->current_spacing = FUEL_SPACING_MAX;
+        }
 
         fuel->pickup_position = (Vector2){spawn_x, spawn_y};
         fuel->pickup_active = true;
