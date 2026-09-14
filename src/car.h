@@ -36,7 +36,7 @@ void car_control(Car *car, float dt);
 void car_rotate(Car *car, float dt);
 void car_move(Car *car, Vector2 terrain[],  float dt);
 void car_apply_suspension(Car *car, Wheel *wheel, float dt);
-void wheel_move(Wheel *wheel, Vector2 terrain[],  float dt);
+void wheel_move(Wheel *wheel, Vector2 terrain[],  float dt, Car *car);
 
 void car_draw(Car *car);
 

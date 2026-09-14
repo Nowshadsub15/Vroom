@@ -58,8 +58,8 @@ void game_update(GameState *state, float dt)
     }
     car_move(car, state->terrain, dt);
     car_rotate(car, dt);
-    wheel_move(&car->back_wheel, state->terrain, dt);
-    wheel_move(&car->front_wheel, state->terrain, dt);
+    wheel_move(&car->back_wheel, state->terrain, dt, car);
+    wheel_move(&car->front_wheel, state->terrain, dt,car);
     car_apply_suspension(car, &car->back_wheel, dt);
     car_apply_suspension(car, &car->front_wheel, dt);
 

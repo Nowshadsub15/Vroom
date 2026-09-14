@@ -4,10 +4,10 @@
 #include <raymath.h>
 
 #define GRAVITY 5
-#define FRICTION 2
+#define FRICTION 0.15
 #define ROTATION_SPEED 25
 #define ROTATE_BACK_SPEED 3
-#define CAR_SPEED 30
+#define CAR_SPEED 16
 #define HILL_SPEED -0.9
 #define WHEEL_ROTATION_SPEED 1000
 
@@ -24,7 +24,7 @@ Car car_init(Vector2 start_position, int width, int height)
     car.back_wheel = (Wheel){
         .radius = 25,
         .padding = 0,
-        .stiffness = 0.8,
+        .stiffness = 1,
         .damping = 2.3,
     };
 
@@ -36,7 +36,7 @@ Car car_init(Vector2 start_position, int width, int height)
     car.front_wheel = (Wheel){
         .radius = 25,
         .padding = 0,
-        .stiffness = 0.8,
+        .stiffness = 1,
         .damping = 2.3,
     };
 
@@ -162,9 +162,9 @@ void car_apply_suspension(Car *car, Wheel *wheel, float dt)
     wheel->velocity = Vector2Subtract(wheel->velocity, Vector2Scale(force, 0.7));
 }
 
-void wheel_move(Wheel *wheel, Vector2 terrain[], float dt)
+void wheel_move(Wheel *wheel, Vector2 terrain[], float dt, Car *car)
 {
-    //wheel->position.x += wheel->velocity.x;
+    wheel->position.x += wheel->velocity.x;
     wheel->position.y += wheel->velocity.y;
 
     wheel->on_ground = false;
@@ -185,5 +185,5 @@ void wheel_move(Wheel *wheel, Vector2 terrain[], float dt)
         }
     }
     wheel->velocity.y += GRAVITY * dt;
-    wheel->angle += wheel->velocity.x * WHEEL_ROTATION_SPEED/20 * dt;
+    wheel->angle += car->velocity.x * WHEEL_ROTATION_SPEED/10 * dt;
 }
