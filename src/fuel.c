@@ -28,14 +28,14 @@ void fuel_update(FuelSystem *fuel, Car *car, Vector2 terrain[], float dt)
 {
     if (fuel->amount > 0)
     {
-        fuel->amount -= FUEL_DRAIN_RATE * dt*0;
+        fuel->amount -= FUEL_DRAIN_RATE * dt * 0.8;
         if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_LEFT))
         {
             if (car->back_wheel.on_ground)
-                fuel->amount -= fabs(car->velocity.x) * 0.00002 * dt;
+                fuel->amount -= fabs(car->velocity.x) * 0.002 * dt;
             if (car->front_wheel.on_ground)
-                fuel->amount -= fabs(car->velocity.x) * 0.0000002 * dt;
-            fuel->amount -= car->velocity.x * 0.02 * dt;
+                fuel->amount -= fabs(car->velocity.x) * 0.002 * dt;
+            fuel->amount -= fabs(car->velocity.x) * 0.02 * dt;
         }
         if (fuel->amount < 0)
         {
@@ -43,10 +43,11 @@ void fuel_update(FuelSystem *fuel, Car *car, Vector2 terrain[], float dt)
         }
     }
 
+    // distance tracking
     fuel->distance_since_pickup += fabsf(car->velocity.x);
-    
 
-    if (fuel->pickup_active==false && fuel->distance_since_pickup >= fuel->current_spacing)
+    // adding new fuel icon
+    if (fuel->pickup_active == false && fuel->distance_since_pickup >= fuel->current_spacing)
     {
         float spawn_x = car->position.x + FUEL_PICKUP_AHEAD;
 
@@ -54,15 +55,16 @@ void fuel_update(FuelSystem *fuel, Car *car, Vector2 terrain[], float dt)
 
         fuel->current_spacing += FUEL_SPACING_INCREAMENT;
 
-        // if (fuel->current_spacing >= FUEL_SPACING_MAX)
-        // {
-        //     fuel->current_spacing = FUEL_SPACING_MAX;
-        // }
+        if (fuel->current_spacing >= FUEL_SPACING_MAX)
+        {
+            fuel->current_spacing = FUEL_SPACING_MAX;
+        }
 
         fuel->pickup_position = (Vector2){spawn_x, spawn_y};
         fuel->pickup_active = true;
     }
 
+    // fuel collect
     if (fuel->pickup_active)
     {
         float dist = Vector2Distance(car->position, fuel->pickup_position);
@@ -93,6 +95,7 @@ bool fuel_is_empty(FuelSystem *fuel)
     return fuel->amount <= 0.0f;
 }
 
+// fuel icon draw
 void fuel_draw_pickup(FuelSystem *fuel)
 {
     if (fuel->pickup_active == false)
@@ -116,6 +119,7 @@ void fuel_draw_pickup(FuelSystem *fuel)
     //     DrawText("F", (int)(pos.x - 5), (int)(pos.y - 9), 20, outline);
 }
 
+// fuel bar draw
 void fuel_draw_bar(FuelSystem *fuel, int window_width, Font temp)
 {
     int bar_w = 300;
