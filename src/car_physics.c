@@ -159,7 +159,7 @@ void car_apply_suspension(Car *car, Wheel *wheel, float dt)
 
 void wheel_move(Wheel *wheel, Vector2 terrain[], float dt)
 {
-    //wheel->position.x += wheel->velocity.x;
+    wheel->position.x += wheel->velocity.x;
     wheel->position.y += wheel->velocity.y;
 
     wheel->on_ground = false;
